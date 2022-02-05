@@ -1,10 +1,10 @@
 var weatherAPIkey = "840819e30adace1a99c607cc7e47419d"
 
-// var submitEl = document.getElementById("city-input").value
+var submitEl = document.getElementById("city-input")
 
 var submitBtn = document.getElementById('search-btn')
 
-var MainCard = document.getElementById('main-weather')
+var mainCard = document.getElementById('main-weather')
 
 var weatherBoxSmallEl = document.getElementById('weather-box-small')
 
@@ -17,9 +17,8 @@ function getCity(location){
     fetch(
         `https://api.openweathermap.org/data/2.5/weather?q=${location}&units=metric&appid=${weatherAPIkey}`
     )
-    .then(function (res)  {
-
-     return res.json()
+    .then(function (response){
+     return response.json()
     })
     .then(function (data){
 
@@ -28,35 +27,38 @@ function getCity(location){
         //current weather card
 
         //current weather variables 
-        
-        let city = data.name
-        let temp = data.main.temp
-
+        var tempData = data.main.temp
+        var windData = data.wind.speed
+        var humidData = data.main.humidity
+        // UV Index Req !!!
 
         //get image varaible
         let icon = `https://openweathermap.org/img/w/${data.weather[0].icon}.png`
-        let icondes = data.weather[0].description
-
+        let iconDes = data.weather[0].description
 
 
         //2  creat our dom elements
         let card = document.createElement('div')
-        let maincard = document.createElement('div')
-        let citeEl = document.createElement('h2')
-        //let tempEl = document
-
-        let cardicon = document.createElement('img')
-
-
+        let cardIcon = document.createElement('img')
+        let cityEl = document.createElement('h2')
+        let tempEl = document.createElement('p')
+        let windEl = document.createElement('p')
+        let humidEl = document.createElement('p')
+        //  let uvEl
+        
         //append to card
 
-        card.append(maincard)
-        mainCity.textContent = city
+        // card.append(mainCard)
+        cityEl.textContent = submitEl.value
+        tempEl.textContent = 'Current Temperature: ' + tempData + 'Celsius'
+        windEl.textContent = 'Wind Speed: ' + windData + 'm/s'
+        humidEl.textContent = 'Humidity: ' + humidData + '%'
 
-        cardicon.setAttribute("src", icon)
-        cardicon.setAttribute('alt', icondes)
+        cardIcon.setAttribute("src", icon)
+        cardIcon.setAttribute('alt', iconDes)
 
-        maincard.append(card, mainCity, cardicon)
+        // needs UV !!!
+        card.append(cardIcon, cityEl, tempEl, windEl, humidEl)
 
 
         // append to html
@@ -70,7 +72,7 @@ function getCity(location){
         let lon = data.coord.lon
 
 
-        getDailyForecast(lat, lon)
+        // getDailyForecast(lat, lon)
 
 
 
@@ -106,9 +108,9 @@ function createForecastCards(forecast){
 function getDailyForecast(lat, lon){
 
     fetch(`https://api.openweathermap.org/data/2.5/onecall?lat=${lat}&lon=${lon}&exclude=current,minutely,hourly,alerts&units=metric&appid=${weatherAPIkey}`
-    ).then(res)
+    ).then(res.json)
     .then(function (data){
-        console.log("forecast data" ,data)
+        console.log('forecast data: ', data)
 
 
 
@@ -121,7 +123,8 @@ function getDailyForecast(lat, lon){
             }
 
 
-    })
+        }
+    )
 
 }
 

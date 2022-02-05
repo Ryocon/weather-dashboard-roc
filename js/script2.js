@@ -52,8 +52,8 @@ function getCity(location){
 
         // card.append(mainCard)
         cityEl.textContent = location
-        tempEl.textContent = 'Current Temperature: ' + tempData + 'Celsius'
-        windEl.textContent = 'Wind Speed: ' + windData + 'm/s'
+        tempEl.textContent = 'Current Temperature: ' + tempData + ' Celsius'
+        windEl.textContent = 'Wind Speed: ' + windData + ' m/s'
         humidEl.textContent = 'Humidity: ' + humidData + '%'
         
 
@@ -100,21 +100,15 @@ function getCity(location){
 }
 
 // this will be for create ammend append of cards
-function createForecastCards(forecast){
+function createForecastCards(daily){
 
-    // var dailyIcon = data.daily.weather.icon
-    // var dailyIconDes = data.daily.weather.description
-    // var dailyTempData = data.daily.temp
-    // var dailyWindData = data.daily.wind_speed
-    // var dailyHumidData = data.daily.humidity
-    // var dailyUvIndex = data.daily.uvi
 
-    var dailyIcon = forecast.daily.weather.icon
-    var dailyIconDes = forecast.daily.weather.description
-    var dailyTempData = forecast.daily.temp
-    var dailyWindData = forecast.daily.wind_speed
-    var dailyHumidData = forecast.daily.humidity
-    var dailyUvIndexData = forecast.daily.uvi
+    var dailyIcon = daily.weather.icon
+    var dailyIconDes = daily.weather.description
+    var dailyTempData = daily.temp
+    var dailyWindData = daily.wind_speed
+    var dailyHumidData = daily.humidity
+    var dailyUvIndexData = daily.uvi
 
     let dailyCard = document.createElement('div')
     let dailyCardIcon = document.createElement('img')
@@ -125,18 +119,23 @@ function createForecastCards(forecast){
 
     dailyCardIcon.setAttribute("src", dailyIcon)
     dailyCardIcon.setAttribute('alt', dailyIconDes)
-    dailytTempEl.textContent = 'Temperature: ' + dailyTempData + 'Celsius'
-    dailyWindEl.textContent = 'Wind Speed: ' + dailyWindData + 'm/s'
+    dailytTempEl.textContent = 'Temperature: ' + dailyTempData + ' Celsius'
+    dailyWindEl.textContent = 'Wind Speed: ' + dailyWindData + ' m/s'
     dailyHumidEl.textContent = 'Humidity: ' + dailyHumidData + '%'
     dailyUvEl.textContent = 'UV Index: ' + dailyUvIndexData
 
     
 
-
-    var uvData = forecast.daily.uvi[0]
+    // UV Index for main card
+    var uvData = daily.uvi[0]
     let uvEl = document.createElement('p')
     uvEl = 'UV Index: ' + uvData
-    mainCard.append(uvEl)
+    // this doesn't work yet
+    card.append(uvEl)
+
+    // neither does this
+    dailyCard.append(dailyCardIcon, dailytTempEl, dailyWindEl, dailyHumidEl, dailyUvEl)
+    weatherBoxSmallEl.append(dailyCard)
 
 
 }
@@ -151,15 +150,15 @@ function getDailyForecast(lat, lon){
     ).then (function (response) {
         return response.json()
     })
-    .then(function (forecast){
-        console.log('forecast data: ', forecast)
+    .then(function (daily){
+        console.log('forecast data: ', daily)
 
         //append to dom
         weatherBoxSmallEl.innerHTML = ""
     
-            for(var i = 1; i < forecast.daily.length-2; i++ ){
+            for(var i = 1; i < daily.length-2; i++ ){
 
-                createForecastCards(forecast.daily[i])
+                createForecastCards(daily[i])
             }
 
 

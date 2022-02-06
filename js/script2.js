@@ -8,11 +8,45 @@ var mainCardEl = document.getElementById('main-weather')
 
 var weatherBoxSmallEl = document.getElementById('weather-box-small')
 
+var searchHistory = document.getElementById('search-history')
+
+
+
+// works
+function searchHistorySet(location) {
+    location = document.getElementById('city-input').value
+
+    date = moment().format('ddd')
+
+    localStorage.setItem(location, date)
+
+}
+
+// needs work
+function searchHistoryGet() {
+    array.forEach(element => {
+
+       var setHistory = localStorage.getItem(date)
+
+       let history = document.createElement('div')
+       let setHistoryBtn = document.createElement('button')
+
+       
+       searchHistory.innerHTML = setHistory
+
+       history.append(setHistoryBtn)
+       searchHistory.append(history)
+
+        setHistoryBtn.addEventListener('click', getCity().value)
+
+    });
+}
+
 
 
 function getCity(location){
     // to find city to search
-    location = document.getElementById("city-input").value
+    location = document.getElementById('city-input').value
 
     fetch(
         `https://api.openweathermap.org/data/2.5/weather?q=${location}&units=metric&appid=${weatherAPIkey}`
@@ -24,59 +58,13 @@ function getCity(location){
 
         console.log("weather data: ", data);
 
-        // //current weather card
-
-        // //current weather variables 
-        // var tempData = data.main.temp
-        // var windData = data.wind.speed
-        // var humidData = data.main.humidity
-        // // UV Index Req !!!
-        
-
-        // //get image varaible
-        // let icon = `https://openweathermap.org/img/w/${data.weather[0].icon}.png`
-        // let iconDes = data.weather[0].description
-
-
-        // //2  creat our dom elements
-        // let card = document.createElement('div')
-        // let cardIcon = document.createElement('img')
-        // let cityEl = document.createElement('h2')
-        // let tempEl = document.createElement('p')
-        // let windEl = document.createElement('p')
-        // let humidEl = document.createElement('p')
-        // //  let uvEl
-        
-        
-        // //append to card
-
-        // // card.append(mainCard)
-        // cityEl.textContent = location
-        // tempEl.textContent = 'Current Temperature: ' + tempData + ' Celsius'
-        // windEl.textContent = 'Wind Speed: ' + windData + ' m/s'
-        // humidEl.textContent = 'Humidity: ' + humidData + '%'
-        
-
-        // cardIcon.setAttribute("src", icon)
-        // cardIcon.setAttribute('alt', iconDes)
-
-        // // needs UV !!!
-        // card.append(cardIcon, cityEl, tempEl, windEl, humidEl)
-
-
-        // // append to html
-        // mainCard.innerHTML = ""
-        // mainCard.append(card)
-
-
-        //start weather api
         let lat = data.coord.lat
 
         let lon = data.coord.lon
 
-
         getDailyForecast(lat, lon)
         getCurrentForecast(lat, lon)
+        searchHistorySet()
 
     }
 
@@ -200,7 +188,7 @@ function createForecastCards(dailyForecasts){
     dailyUvEl.textContent = 'UV Index: ' + dailyUvIndexData
 
     
-    dailyCard.append(dailyCardIcon, dailyTime, dailytTempEl, dailyWindEl, dailyHumidEl, dailyUvEl)
+    dailyCard.append(dailyCardIcon, dailyTimeEl, dailytTempEl, dailyWindEl, dailyHumidEl, dailyUvEl)
     weatherBoxSmallEl.append(dailyCard)
 
 

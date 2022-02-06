@@ -4,7 +4,7 @@ var submitEl = document.getElementById("city-input")
 
 var submitBtn = document.getElementById('search-btn')
 
-var mainCard = document.getElementById('main-weather')
+var mainCardEl = document.getElementById('main-weather')
 
 var weatherBoxSmallEl = document.getElementById('weather-box-small')
 
@@ -87,6 +87,64 @@ function getCity(location){
 }
 
 
+
+
+// IS THE URLQUERY THE ISSUE ???
+function getCurrentForecast(lat, lon) {      
+    fetch(`https://api.openweathermap.org/data/2.5/onecall?lat=${lat}&lon=${lon}&exclude=minutely,hourly,alerts&units=metric&appid=${weatherAPIkey}`
+    ).then (function (response) {
+        return response.json()
+    })
+    .then(function (data){
+        console.log('Current data: ', data)
+
+        mainCardEl.innerHTML = ""
+        let currentData = data.current
+        createMainCard(currentData)
+        }
+
+    )
+
+} 
+
+
+// creating main card
+function createMainCard(currentData) {
+
+    var mainIcon = `https://openweathermap.org/img/w/${currentData.weather[0].icon}.png`
+    var mainIconDes = currentData.weather[0].description
+    var mainTime = new Date(currentData.dt * 1000)
+    var mainTimeConv = mainTime.toDateString()
+    var mainTempData = currentData.temp
+    var mainWindData = currentData.wind_speed
+    var mainHumidData = currentData.humidity
+    var mainUvIndexData = currentData.uvi
+
+
+    let mainCard = document.createElement('div')
+    let mainCardIcon = document.createElement('img')
+    let mainTimeEl = document.createElement('p')
+    let mainTempEl = document.createElement('p')
+    let mainWindEl = document.createElement('p')
+    let mainHumidEl = document.createElement('p')
+    let mainUvEl = document.createElement('p')
+
+
+    mainCardIcon.setAttribute("src", mainIcon)
+    mainCardIcon.setAttribute('alt', mainIconDes)
+    mainTimeEl.textContent = mainTimeConv
+    mainTempEl.textContent = 'Temperature: ' + mainTempData + ' Celsius'
+    mainWindEl.textContent = 'Wind Speed: ' + mainWindData + ' m/s'
+    mainHumidEl.textContent = 'Humidity: ' + mainHumidData + '%'
+    mainUvEl = 'UV Index: ' + mainUvIndexData
+     
+    
+    // this doesn't work yet
+    mainCard.append(mainCardIcon, mainTimeEl, mainTempEl, mainWindEl, mainHumidEl, mainUvEl)
+    mainCardEl.append(mainCard)
+}
+
+
 // working from lat and lon
 function getDailyForecast(lat, lon){
 
@@ -111,63 +169,6 @@ function getDailyForecast(lat, lon){
     )
 
 }
-
-// IS THE URLQUERY THE ISSUE ???
-function getCurrentForecast(lat, lon) {      
-    fetch(`https://api.openweathermap.org/data/2.5/onecall?lat=${lat}&lon=${lon}&exclude=minutely,hourly,alerts&units=metric&appid=${weatherAPIkey}`
-    ).then (function (response) {
-        return response.json()
-    })
-    .then(function (data){
-        console.log('Current data: ', data)
-
-        mainCard.innerHTML = ""
-        let currentData = data.current
-        createMainCard(currentData)
-        }
-
-    )
-
-} 
-
-
-
-// creating main card
-function createMainCard(currentData) {
-
-    var mainIcon = `https://openweathermap.org/img/w/${currentData.weather[0].icon}.png`
-    var mainIconDes = currentData.weather[0].description
-    var mainTime = new Date(currentData.dt * 1000)
-    var mainTimeConv = mainTime.toDateString()
-    var mainTempData = currentData.temp
-    var mainWindData = currentData.wind_speed
-    var mainHumidData = currentData.humidity
-    var mainUvIndexData = currentData.uvi
-
-
-    let mainCardEl = document.createElement('div')
-    let mainCardIcon = document.createElement('img')
-    let mainTimeEl = document.createElement('p')
-    let mainTempEl = document.createElement('p')
-    let mainWindEl = document.createElement('p')
-    let mainHumidEl = document.createElement('p')
-    let mainUvEl = document.createElement('p')
-
-
-    mainCardIcon.setAttribute("src", mainIcon)
-    mainCardIcon.setAttribute('alt', mainIconDes)
-    mainTimeEl.textContent = mainTime
-    mainTempEl.textContent = 'Temperature: ' + mainTempData + ' Celsius'
-    mainWindEl.textContent = 'Wind Speed: ' + mainWindData + ' m/s'
-    mainHumidEl.textContent = 'Humidity: ' + mainHumidData + '%'
-    mainUvEl = 'UV Index: ' + mainUvIndexData
-     
-    
-    // this doesn't work yet
-    mainCard.append(mainCardIcon, mainTimeEl, mainTempEl, mainWindEl, mainHumidEl, mainUvEl)
-    mainCardEl.append(mainCard)
-}
-
 
 // this will be for create ammend append of cards
 function createForecastCards(dailyForecasts){

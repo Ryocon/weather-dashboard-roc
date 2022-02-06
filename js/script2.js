@@ -76,6 +76,7 @@ function getCity(location){
 
 
         getDailyForecast(lat, lon)
+        getCurrentForecast(lat, lon)
 
     }
 
@@ -94,7 +95,7 @@ function getDailyForecast(lat, lon){
         return response.json()
     })
     .then(function (data){
-        console.log('forecast data: ', data)
+        console.log('Forecast data: ', data)
 
         //append to dom
         weatherBoxSmallEl.innerHTML = ""
@@ -112,17 +113,17 @@ function getDailyForecast(lat, lon){
 }
 
 // IS THE URLQUERY THE ISSUE ???
-function getHourlyForecast(lat, lon) {      
-    fetch(`https://api.openweathermap.org/data/2.5/onecall?lat=${lat}&lon=${lon}&exclude=current,minutely,hourly,alerts&units=metric&appid=${weatherAPIkey}`
+function getCurrentForecast(lat, lon) {      
+    fetch(`https://api.openweathermap.org/data/2.5/onecall?lat=${lat}&lon=${lon}&exclude=minutely,hourly,alerts&units=metric&appid=${weatherAPIkey}`
     ).then (function (response) {
         return response.json()
     })
     .then(function (data){
-        console.log('hourly data: ', data)
+        console.log('Current data: ', data)
 
         mainCard.innerHTML = ""
-        let hourlyData = data.hourly
-        createMainCard(hourlyData)
+        let currentData = data.current
+        createMainCard(currentData)
         }
 
     )
@@ -132,15 +133,16 @@ function getHourlyForecast(lat, lon) {
 
 
 // creating main card
-function createMainCard(hourlyData) {
+function createMainCard(currentData) {
 
-    var mainIcon = hourlyData.weather.icon
-    var mainIconDes = hourlyData.weather.description
-    var mainTime = hourlyData.dt
-    var mainTempData = hourlyData.daily.temp
-    var mainWindData = hourlyData.daily.wind_speed
-    var mainHumidData = hourlyData.daily.humidity
-    var mainUvIndexData = hourlyData.daily.uvi
+    var mainIcon = `https://openweathermap.org/img/w/${currentData.weather[0].icon}.png`
+    var mainIconDes = currentData.weather[0].description
+    var mainTime = new Date(currentData.dt * 1000)
+    var mainTimeConv = mainTime.toDateString()
+    var mainTempData = currentData.temp
+    var mainWindData = currentData.wind_speed
+    var mainHumidData = currentData.humidity
+    var mainUvIndexData = currentData.uvi
 
 
     let mainCardEl = document.createElement('div')
@@ -171,11 +173,11 @@ function createMainCard(hourlyData) {
 function createForecastCards(dailyForecasts){
 
 
-    var dailyIcon = dailyForecasts.weather.icon
-    var dailyIconDes = dailyForecasts.weather.description
+    var dailyIcon = `https://openweathermap.org/img/w/${dailyForecasts.weather[0].icon}.png`
+    var dailyIconDes = dailyForecasts.weather[0].description
     var dailyTime = new Date(dailyForecasts.dt * 1000)
     var dailyTimeConv = dailyTime.toDateString()
-    var dailyTempData = dailyForecasts.temp
+    var dailyTempData = dailyForecasts.temp.day
     var dailyWindData = dailyForecasts.wind_speed
     var dailyHumidData = dailyForecasts.humidity
     var dailyUvIndexData = dailyForecasts.uvi

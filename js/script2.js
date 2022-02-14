@@ -15,12 +15,13 @@ var searchHistory = document.getElementById('search-history')
 
 // prevSearch = undefined
 
+var prevBtn = document.getElementById('prev-btn')
+
 // works
 function searchHistorySet(location) {
    
     location = document.getElementById('city-input').value
 
-    // localStorage.setItem('prev-city', JSON.stringify(location))
     localStorage.setItem('prev-city', location)
 
 }
@@ -40,30 +41,34 @@ function searchHistoryAppend() {
 
     if (prevSearch !== null) {
         prevBtn = document.createElement('button')
-        prevBtn.setAttribute('class', 'p-3 mb-2 bg-warning text-dark')
+        prevBtn.removeAttribute('class', 'hide')
+        prevBtn.setAttribute('class', 'p-2 mb-2 btn btn-secondary btn-outline-dark text-light')
         prevBtn.textContent = prevSearch
 
         searchHistory.append(prevBtn)
+
         // return
     } else {
         console.log('Nothing searched')
     }
+
+    prevBtn.addEventListener('click', function() {
+
+
+        var prevSearchLocation = localStorage.getItem('prev-city')
+    
+    
+        console.log(prevSearchLocation)
+    
+        prevSearchCity(location)
+    }
+    )
 
 
 }
 
 searchHistoryAppend()
 
-prevBtn.addEventListener('click', function() {
-
-
-    var prevSearchLocation = localStorage.getItem('prev-city')
-
-    console.log(prevSearchLocation)
-
-    prevSearchCity()
-}
-)
 
 
 function prevSearchCity(prevSearchLocation){
@@ -86,7 +91,7 @@ function prevSearchCity(prevSearchLocation){
 
         getDailyForecast(lat, lon)
         getCurrentForecast(lat, lon)
-        // searchHistorySet(location)
+        searchHistorySet(location)
         
     }
 
@@ -96,7 +101,6 @@ function prevSearchCity(prevSearchLocation){
 
 }
 
-debugger
 
 function getCity(location){
     // to find city to search
@@ -119,6 +123,9 @@ function getCity(location){
         getDailyForecast(lat, lon)
         getCurrentForecast(lat, lon)
         searchHistorySet(location)
+        searchHistoryAppend(location)
+        
+        
         
     }
 
@@ -165,6 +172,7 @@ function createMainCard(currentData) {
     
 
     let mainCard = document.createElement('div')
+    let mainCardDesc = document.createElement('h3')
     let mainCardIcon = document.createElement('img')
     let mainTimeEl = document.createElement('p')
     let mainTempEl = document.createElement('p')
@@ -182,7 +190,7 @@ function createMainCard(currentData) {
         mainUvEl.setAttribute('class', 'uvRed')
     }
     
-
+    mainCardDesc.textContent = 'Current Weather:'
     mainCardIcon.setAttribute("src", mainIcon)
     mainCardIcon.setAttribute('alt', mainIconDes)
     mainTimeEl.textContent = mainTimeConv
@@ -190,6 +198,8 @@ function createMainCard(currentData) {
     mainWindEl.textContent = 'Wind Speed: ' + mainWindData + ' m/s'
     mainHumidEl.textContent = 'Humidity: ' + mainHumidData + '%'
     mainUvEl = 'UV Index: ' + mainUvIndexData
+
+    mainCard.setAttribute('class', 'bg-primary bg-gradient p-2 m-2 rounded')
     
     
 
@@ -197,7 +207,7 @@ function createMainCard(currentData) {
      
     
     // this doesn't work yet
-    mainCard.append(mainCardIcon, mainTimeEl, mainTempEl, mainWindEl, mainHumidEl, mainUvEl)
+    mainCard.append(mainCardDesc, mainCardIcon, mainTimeEl, mainTempEl, mainWindEl, mainHumidEl, mainUvEl)
     mainCardEl.append(mainCard)
 }
 
@@ -241,6 +251,7 @@ function createForecastCards(dailyForecasts){
     var dailyUvIndexData = dailyForecasts.uvi
 
     let dailyCard = document.createElement('div')
+    let dailyCardDesc = document.createElement('h3')
     let dailyCardIcon = document.createElement('img')
     let dailyTimeEl = document.createElement('p')
     let dailytTempEl = document.createElement('p')
@@ -259,6 +270,7 @@ function createForecastCards(dailyForecasts){
     }
 
 
+    dailyCardDesc.textContent = 'Forecast:'
     dailyCardIcon.setAttribute("src", dailyIcon)
     dailyCardIcon.setAttribute('alt', dailyIconDes)
     dailyTimeEl.textContent = dailyTimeConv
@@ -267,8 +279,9 @@ function createForecastCards(dailyForecasts){
     dailyHumidEl.textContent = 'Humidity: ' + dailyHumidData + '%'
     dailyUvEl.textContent = 'UV Index: ' + dailyUvIndexData
 
+    dailyCard.setAttribute('class', 'bg-gradient p-2 m-2 rounded')
     
-    dailyCard.append(dailyCardIcon, dailyTimeEl, dailytTempEl, dailyWindEl, dailyHumidEl, dailyUvEl)
+    dailyCard.append(dailyCardDesc, dailyCardIcon, dailyTimeEl, dailytTempEl, dailyWindEl, dailyHumidEl, dailyUvEl)
     weatherBoxSmallEl.append(dailyCard)
 
 

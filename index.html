@@ -19,39 +19,43 @@
     <link rel="stylesheet" href="css/styles.css">
     <title>Document</title>
 </head>
-<body>
-    <header>
-        <h1>Weather whether you like it or not</h1>
+<body class="container-fluid bg-gradient" style="background-color: #0dcaf0;">
+    <header class="d-flex justify-content-center">
+        <h1 class="p-4">Weather, whether you like it or not</h1>
+        
     </header>
-<div>
-    <i class="fas fa-rainbow"></i>
-    <i class="bi-rainbow"></i>
+<div class="d-flex flex-lg-column flex-sm-column justify-content-center align-items-center">
+    <!-- <i class="fas fa-rainbow"></i> -->
+    <i class="bi-rainbow p-1"></i>
+    
 
     <!-- input -->
-    <input id="city-input" type="text" placeholder="Search a city!">
+    <input id="city-input" class="m-2 " type="text" placeholder="Search a city!">
 
     <!-- search btn -->
-    <button id="search-btn">Search</button>
+    <button id="search-btn" class="btn btn-light btn-outline-dark m-2">Search</button>
 
 
 </div class="weather-box">
 
 
     
-<div id="main-weather">
+<div id="main-weather" class="d-flex flex-lg-column flex-sm-column justify-content-center align-items-center">
 
 <!-- empty div to be appended to -->
 
 </div>
     
 
-<div id="weather-box-small">
+<div id="weather-box-small" class="d-flex flex-column flex-lg-row flex-xl-row justify-content-center align-items-center ">
 
 <!-- empty div to be appended to -->
 
 </div>
 
-<div id="search-history">
+<div id="search-history" class="d-flex justify-content-center align-items-center">
+
+    <button id="prev-btn" class="hide"></button>
 
 </div>
 

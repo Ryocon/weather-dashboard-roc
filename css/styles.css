@@ -1,9 +1,12 @@
+/* imported google font */
 @import url('https://fonts.googleapis.com/css2?family=Poppins&display=swap');
 
+/* universally applied font */
 * {
     font-family: 'Poppins', sans-serif;
 }
 
+/* colour settings for the UV Index to display to */
 .uvGreen {
     color: green;
 }
@@ -20,6 +23,7 @@
     color: red;
 }
 
+/* class to display none */
 .hide {
     display: none;
 }

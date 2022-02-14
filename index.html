@@ -19,40 +19,42 @@
     <link rel="stylesheet" href="css/styles.css">
     <title>Document</title>
 </head>
+<!-- body uses a bootstrap fluid container to make it responsive on all breakpoints -->
 <body class="container-fluid bg-gradient" style="background-color: #0dcaf0;">
+
     <header class="d-flex justify-content-center">
         <h1 class="p-4">Weather, whether you like it or not</h1>
-        
     </header>
+
+<!-- starting div element containing the search input for the user -->
 <div class="d-flex flex-lg-column flex-sm-column justify-content-center align-items-center">
-    <!-- <i class="fas fa-rainbow"></i> -->
+    <!-- bootstrap icon usage -->
     <i class="bi-rainbow p-1"></i>
     
-
-    <!-- input -->
+    <!-- input for the user to search a city -->
     <input id="city-input" class="m-2 " type="text" placeholder="Search a city!">
 
-    <!-- search btn -->
+    <!-- search button that activates the event listener -->
     <button id="search-btn" class="btn btn-light btn-outline-dark m-2">Search</button>
 
-
+<!-- div containing all the weather cards when appended -->
 </div class="weather-box">
 
-
-    
+<!-- div containing the current weather or main weather -->
 <div id="main-weather" class="d-flex flex-lg-column flex-sm-column justify-content-center align-items-center">
 
 <!-- empty div to be appended to -->
 
 </div>
     
-
+<!-- div that contains the forecast weather cards -->
 <div id="weather-box-small" class="d-flex flex-column flex-lg-row flex-xl-row justify-content-center align-items-center ">
 
 <!-- empty div to be appended to -->
 
 </div>
 
+<!-- search history button that appends to the page once data is in local storage -->
 <div id="search-history" class="d-flex justify-content-center align-items-center">
 
     <button id="prev-btn" class="hide"></button>
@@ -81,5 +83,5 @@
 <!-- momentjs -->
 <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.24.0/moment.min.js"></script>
 <!-- local js -->
-<script src="js/script2.js"></script>
+<script src="js/script.js"></script>
 </html>

@@ -144,6 +144,7 @@ function getCurrentForecast(lat, lon) {
 function createMainCard(currentData) {
   var mainIcon = `https://openweathermap.org/img/w/${currentData.weather[0].icon}.png`;
   var mainIconDes = currentData.weather[0].description;
+//   the time pulled from the API is in unix format but it is converted here by setting a new date, multiplying it by 1000 and using the toDateString method
   var mainTime = new Date(currentData.dt * 1000);
   var mainTimeConv = mainTime.toDateString();
   var mainTempData = currentData.temp;

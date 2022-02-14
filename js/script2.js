@@ -1,6 +1,6 @@
 var weatherAPIkey = "840819e30adace1a99c607cc7e47419d"
 
-var submitEl = document.getElementById("city-input")
+var locationEl = document.getElementById("city-input")
 
 var submitBtn = document.getElementById('search-btn')
 
@@ -10,39 +10,93 @@ var weatherBoxSmallEl = document.getElementById('weather-box-small')
 
 var searchHistory = document.getElementById('search-history')
 
+// makes the page bug out!?
+// var location = document.getElementById('city-input').value
 
+// prevSearch = undefined
 
 // works
 function searchHistorySet(location) {
+   
     location = document.getElementById('city-input').value
 
-    date = moment().format('ddd')
-
-    localStorage.setItem(location, date)
+    // localStorage.setItem('prev-city', JSON.stringify(location))
+    localStorage.setItem('prev-city', location)
 
 }
 
 // needs work
 function searchHistoryGet() {
-    array.forEach(element => {
-
-       var setHistory = localStorage.getItem(date)
-
-       let history = document.createElement('div')
-       let setHistoryBtn = document.createElement('button')
-
-       
-       searchHistory.innerHTML = setHistory
-
-       history.append(setHistoryBtn)
-       searchHistory.append(history)
-
-        setHistoryBtn.addEventListener('click', getCity().value)
-
-    });
+    
+    return localStorage.getItem('prev-city')
+    
 }
 
+function searchHistoryAppend() {
 
+
+
+    prevSearch = searchHistoryGet()
+
+    if (prevSearch !== null) {
+        prevBtn = document.createElement('button')
+        prevBtn.setAttribute('class', 'p-3 mb-2 bg-warning text-dark')
+        prevBtn.textContent = prevSearch
+
+        searchHistory.append(prevBtn)
+        // return
+    } else {
+        console.log('Nothing searched')
+    }
+
+
+}
+
+searchHistoryAppend()
+
+prevBtn.addEventListener('click', function() {
+
+
+    var prevSearchLocation = localStorage.getItem('prev-city')
+
+    console.log(prevSearchLocation)
+
+    prevSearchCity()
+}
+)
+
+
+function prevSearchCity(prevSearchLocation){
+    // to find city to search
+    var prevSearchLocation = localStorage.getItem('prev-city')
+
+    fetch(
+        `https://api.openweathermap.org/data/2.5/weather?q=${prevSearchLocation}&units=metric&appid=${weatherAPIkey}`
+    )
+    .then(function (response){
+     return response.json()
+    })
+    .then(function (data){
+
+        console.log("weather data: ", data);
+
+        let lat = data.coord.lat
+
+        let lon = data.coord.lon
+
+        getDailyForecast(lat, lon)
+        getCurrentForecast(lat, lon)
+        // searchHistorySet(location)
+        
+    }
+
+    ).catch(function (err){
+        console.log(err)
+    })
+
+}
+
+debugger
 
 function getCity(location){
     // to find city to search
@@ -64,8 +118,8 @@ function getCity(location){
 
         getDailyForecast(lat, lon)
         getCurrentForecast(lat, lon)
-        searchHistorySet()
-
+        searchHistorySet(location)
+        
     }
 
     ).catch(function (err){
@@ -108,6 +162,7 @@ function createMainCard(currentData) {
     var mainHumidData = currentData.humidity
     var mainUvIndexData = currentData.uvi
 
+    
 
     let mainCard = document.createElement('div')
     let mainCardIcon = document.createElement('img')
@@ -117,6 +172,16 @@ function createMainCard(currentData) {
     let mainHumidEl = document.createElement('p')
     let mainUvEl = document.createElement('p')
 
+    if (mainUvIndexData <= 2) {
+        mainUvEl.setAttribute('class', 'uvGreen')
+    } else if (mainUvIndexData > 2 && mainUvIndexData <= 5) {
+        mainUvEl.setAttribute('class', 'uvYellow') 
+    } else if (mainUvIndexData > 5 && mainUvIndexData <= 7) {
+        mainUvEl.setAttribute('class', 'uvOrange')
+    } else {
+        mainUvEl.setAttribute('class', 'uvRed')
+    }
+    
 
     mainCardIcon.setAttribute("src", mainIcon)
     mainCardIcon.setAttribute('alt', mainIconDes)
@@ -125,6 +190,10 @@ function createMainCard(currentData) {
     mainWindEl.textContent = 'Wind Speed: ' + mainWindData + ' m/s'
     mainHumidEl.textContent = 'Humidity: ' + mainHumidData + '%'
     mainUvEl = 'UV Index: ' + mainUvIndexData
+    
+    
+
+    
      
     
     // this doesn't work yet
@@ -179,6 +248,17 @@ function createForecastCards(dailyForecasts){
     let dailyHumidEl = document.createElement('p')
     let dailyUvEl = document.createElement('p')
 
+    if (dailyUvIndexData <= 2) {
+        dailyUvEl.setAttribute('class', 'uvGreen')
+    } else if (dailyUvIndexData > 2 && dailyUvIndexData <= 5) {
+        dailyUvEl.setAttribute('class', 'uvYellow') 
+    } else if (dailyUvIndexData > 5 && dailyUvIndexData <= 7) {
+        dailyUvEl.setAttribute('class', 'uvOrange')
+    } else {
+        dailyUvEl.setAttribute('class', 'uvRed')
+    }
+
+
     dailyCardIcon.setAttribute("src", dailyIcon)
     dailyCardIcon.setAttribute('alt', dailyIconDes)
     dailyTimeEl.textContent = dailyTimeConv
@@ -197,3 +277,4 @@ function createForecastCards(dailyForecasts){
 
 
 submitBtn.addEventListener('click', getCity)
+

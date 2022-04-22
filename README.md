@@ -1,5 +1,7 @@
 # weather-dashboard-roc
 
+<img src=https://img.shields.io/badge/License-MIT-orange.svg>
+
 ## Description
 This project is a weather dashboard that pulls data from the Openweather API. The app displays the current weather, an icon showing the weather, temperature in celcius, wind speed, humidity and UV Index. It also displays the next 5 days weather forecast and can allow the user to search their most recent search.
 
